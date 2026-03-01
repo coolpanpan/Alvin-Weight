@@ -1,3 +1,4 @@
+console.log("🔥 script.js 有被載入");
 const BIN_ID = "69a43cc143b1c97be9a947d1"; 
 const API_KEY = "$2a$10$.Rysps8J0rt1vIbGV/ziMOUogso7dFLpSVGgLq2m3I3cqHESjCgca";
 
@@ -41,3 +42,4 @@ document.getElementById("btn").addEventListener("click", async () => {
 });
 
 loadWeight();
+
