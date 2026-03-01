@@ -3,7 +3,6 @@ const API_KEY = "$2a$10$.Rysps8J0rt1vIbGV/ziMOUogso7dFLpSVGgLq2m3I3cqHESjCgca";
 
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-// 讀取雲端 weight
 async function loadWeight() {
   const res = await fetch(BIN_URL, {
     headers: {
@@ -12,17 +11,17 @@ async function loadWeight() {
   });
 
   const data = await res.json();
-  const weight = data.record.weight;
+  console.log("JSONBin 回傳：", data);
 
+  const weight = data.record.weight;
   document.getElementById("title").innerText =
     `林靖恩 的體重：${weight} kg`;
 
   return weight;
 }
 
-// 將 weight 寫回雲端
 async function saveWeight(newValue) {
-  await fetch(BIN_URL, {
+  const res = await fetch(BIN_URL, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -30,15 +29,15 @@ async function saveWeight(newValue) {
     },
     body: JSON.stringify({ weight: newValue })
   });
+
+  const result = await res.json();
+  console.log("寫入結果：", result);
 }
 
-// 點按鈕 +1
 document.getElementById("btn").addEventListener("click", async () => {
-  let current = await loadWeight();
-  let updated = current + 1;
-  await saveWeight(updated);
+  const current = await loadWeight();
+  await saveWeight(current + 1);
   await loadWeight();
 });
 
-// 初始載入
 loadWeight();
