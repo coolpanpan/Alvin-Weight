@@ -1,45 +1,33 @@
 console.log("🔥 script.js 有被載入");
-const BIN_ID = "69a43cc143b1c97be9a947d1"; 
-const API_KEY = "$2a$10$.Rysps8J0rt1vIbGV/ziMOUogso7dFLpSVGgLq2m3I3cqHESjCgca";
 
-const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+// 讀取體重
+function loadWeight() {
+  let weight = localStorage.getItem("weight");
 
-async function loadWeight() {
-  const res = await fetch(BIN_URL, {
-    headers: {
-      "X-Master-Key": API_KEY
-    }
-  });
+  if (weight === null) {
+    weight = 0;
+    localStorage.setItem("weight", weight);
+  }
 
-  const data = await res.json();
-  console.log("JSONBin 回傳：", data);
-
-  const weight = data.record.weight;
   document.getElementById("title").innerText =
     `林靖恩 的體重：${weight} kg`;
 
-  return weight;
+  return Number(weight);
 }
 
-async function saveWeight(newValue) {
-  const res = await fetch(BIN_URL, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Master-Key": API_KEY
-    },
-    body: JSON.stringify({ weight: newValue })
-  });
-
-  const result = await res.json();
-  console.log("寫入結果：", result);
+// 儲存體重
+function saveWeight(value) {
+  localStorage.setItem("weight", value);
 }
 
-document.getElementById("btn").addEventListener("click", async () => {
-  const current = await loadWeight();
-  await saveWeight(current + 1);
-  await loadWeight();
+// 按鈕
+document.getElementById("btn").addEventListener("click", () => {
+  let current = loadWeight();
+  current += 1;
+
+  saveWeight(current);
+  loadWeight();
 });
 
+// 初始化
 loadWeight();
-
